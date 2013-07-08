@@ -1,0 +1,13 @@
+			
+			
+//			[Bindable]
+//			private var buttonNameList:ArrayCollection = new ArrayCollection();
+//			buttonNameList.addItem("用户");
+//			buttonNameList.addItem("部门");
+
+//
+//
+//			protected function buttonBar_changeHandler(event:IndexChangeEvent):void
+//			{
+//				tabNavigator.selectedIndex = buttonBar.selectedIndex;
+//			}

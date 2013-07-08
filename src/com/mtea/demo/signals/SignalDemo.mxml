@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600"
+			   creationComplete="init(event)">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			private var personService:PersonService;
+
+			protected function init(event:FlexEvent):void
+			{
+				personService = new PersonService();
+			}
+
+			protected function cleanButton_clickHandler(event:MouseEvent):void
+			{
+				PersonService.dataCache = "";
+			}
+
+
+			protected function sayNothing_clickHandler(event:MouseEvent):void
+			{
+				personService.person.sayNothing();
+			}
+
+			protected function saySomething_clickHandler(event:MouseEvent):void
+			{
+				personService.person.saySomething("我是macrotea");
+			}
+
+			protected function removePersonStringSignalHandler_clickHandler(event:MouseEvent):void
+			{
+				personService.removePersonStringSignalHandler();
+			}
+
+			protected function saySomethingMoreTimes_clickHandler(event:MouseEvent):void
+			{
+				personService.person.saySomethingMoreTimes("我是macrotea,But Once");
+			}
+
+			protected function remove_stringSignal_all_clickHandler(event:MouseEvent):void
+			{
+				personService.remove_stringSignal_all();
+			}
+
+			protected function run_clickHandler(event:MouseEvent):void
+			{
+				personService.person.run();
+			}
+
+			protected function timer_clickHandler(event:MouseEvent):void
+			{
+				personService.person.startTimer();
+			}
+
+			protected function click_clickHandler(event:MouseEvent):void
+			{
+				personService.person.manualClick();
+			}
+
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:VGroup x="0" y="0" width="100%" height="100%" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10">
+		<s:Label text="动作操作按钮: "/>
+		<s:HGroup width="100%" height="200">
+			<s:Button label="1.sayNothing" id="sayNothing" click="sayNothing_clickHandler(event)"/>
+			<s:Button label="2.saySomething" id="saySomething" click="saySomething_clickHandler(event)"/>
+			<s:Button label="2.remove_stringSignal_PersonStringSignalHandler" id="removePersonStringSignalHandler" click="removePersonStringSignalHandler_clickHandler(event)"/>
+			<s:Button label="3.saySomethingMoreTimes" id="saySomethingMoreTimes" click="saySomethingMoreTimes_clickHandler(event)"/>
+			<s:Button label="4.remove_stringSignal_all" id="remove_stringSignal_all" click="remove_stringSignal_all_clickHandler(event)"/>
+			<s:Button label="5.run" id="run" click="run_clickHandler(event)"/>
+			<s:Button label="6.timer" id="timer" click="timer_clickHandler(event)"/>
+			<s:Button label="7.click" id="click" click="click_clickHandler(event)"/>
+		</s:HGroup>
+		<s:Label text="动作操作输出信息: "/>
+		<s:TextArea width="100%" id="messageContainer" text="{PersonService.dataCache}"/>
+		<s:Button label="清空" id="cleanButton" click="cleanButton_clickHandler(event)"/>
+	</s:VGroup>
+
+</s:Application>

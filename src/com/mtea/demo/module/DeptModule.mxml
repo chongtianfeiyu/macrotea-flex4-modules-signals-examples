@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Module xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		   xmlns:s="library://ns.adobe.com/flex/spark" 
+		   xmlns:mx="library://ns.adobe.com/flex/mx" layout="absolute" width="100%" height="100%"
+		   creationComplete="init(event)" backgroundColor="#C6D1FA"
+		   implements="com.mtea.demo.module.interfaces.ModuleDescribable"><!--// NOTICE macrotea@qq.com / 2013-7-5 16:35:05 -->
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mtea.demo.event.CommonEvent;
+			import com.mtea.demo.vo.UserVo;
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			
+			[Bindable]
+			private var developUserListData:ArrayCollection = new ArrayCollection();
+
+			protected function init(event:FlexEvent):void
+			{
+				developUserListData.addItem("默认用户macrotea");
+				
+				//监听事件
+				this.systemManager.addEventListener(CommonEvent.ADD_USER_TO_DEPT,addUserToDeptHandler)
+			}
+			
+			protected function addUserToDeptHandler(event:CommonEvent):void
+			{
+				var userVo:UserVo = event.data as UserVo;
+				developUserListData.addItem(userVo.username);
+			}
+			
+			/**
+			 * 实现 ModuleDescribable 接口
+			 */ 
+			public function descMeAfterLoaded():String{
+				return createDesc();
+			}
+			
+			protected function createDesc():String{
+				return "我是部门模块,您已经加载此模块了";
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+	</fx:Declarations>
+	<s:VGroup x="0" y="0" width="100%" height="100%" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10">
+		<s:Label text="当前研发部拥有的用户:"/>
+		<s:List width="100%" height="100%" id="developUserList" contentBackgroundColor="#C6D1FA" dataProvider="{developUserListData}"></s:List>
+	</s:VGroup>
+</mx:Module>

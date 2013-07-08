@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600"
+			   creationComplete="init(event)">
+	<fx:Script>
+		<![CDATA[
+			import com.mtea.demo.module.DeptModule;
+			import com.mtea.demo.module.UserModule;
+			import com.mtea.demo.module.interfaces.ModuleDescribable;
+			import com.mtea.demo.module.signal.RoleModuleSignal;
+			
+			import mx.events.FlexEvent;
+			import mx.events.IndexChangedEvent;
+			import mx.events.ModuleEvent;
+			
+			private const TAB_NAME_USER:String = "USER";
+			private const TAB_NAME_DEPT:String = "DEPT";
+			
+			private var _currentTabName:String = TAB_NAME_USER;
+			
+			[Bindable] private var _currentRandomText:String = "NONE";
+			[Bindable] private var _currentMessage:String = "NONE";
+			
+			protected function init(event:FlexEvent):void
+			{
+				var timer:Timer = new Timer(2000, 0); 
+				timer.addEventListener(TimerEvent.TIMER, function onTimer(event:TimerEvent):void{ 
+					var text:String = Math.floor(100*Math.random()).toString();
+					currentRandomText = text;
+				}); 
+				timer.start(); 
+				
+				//监听Role模块的信号
+				RoleModuleSignal.me().messageSignal.add(roleMessageHandler);
+			}
+
+			protected function tabNavigator_changeHandler(event:IndexChangedEvent):void
+			{
+				trace("正在切换导航标签页....");
+				if(tabNavigator.selectedIndex==0){
+					currentTabName = TAB_NAME_USER;
+				}else if(tabNavigator.selectedIndex==1){
+					currentTabName = TAB_NAME_DEPT;
+				}
+			}
+
+			public function get currentTabName():String
+			{
+				return _currentTabName;
+			}
+
+			public function set currentTabName(value:String):void
+			{
+				_currentTabName = value;
+			}
+
+			public function get currentRandomText():String
+			{
+				return _currentRandomText;
+			}
+
+			public function set currentRandomText(value:String):void
+			{
+				_currentRandomText = value;
+			}
+
+			public function get currentMessage():String
+			{
+				return _currentMessage;
+			}
+
+			public function set currentMessage(value:String):void
+			{
+				_currentMessage = value;
+			}
+
+			protected function userModuleLoader_readyHandler(event:ModuleEvent):void
+			{
+				//NOTICE macrotea@qq.com / 2013-7-5 16:26:23 获得用户模块
+				//NOTICE macrotea@qq.com / 2013-7-5 16:26:23 若as UserModule 会出错
+				var userModule:ModuleDescribable = userModuleLoader.child as ModuleDescribable;
+				currentMessage = userModule.descMeAfterLoaded();
+			}
+
+			protected function deptModuleLoader_readyHandler(event:ModuleEvent):void
+			{
+				//NOTICE macrotea@qq.com / 2013-7-5 16:26:23 获得部门模块
+				//NOTICE macrotea@qq.com / 2013-7-5 16:26:23 若as DeptModule 会出错
+				var deptModule:ModuleDescribable = deptModuleLoader.child as ModuleDescribable;
+				currentMessage = deptModule.descMeAfterLoaded();
+			}
+
+			protected function roleModuleLoader_readyHandler(event:ModuleEvent):void
+			{
+				//NOTICE macrotea@qq.com / 2013-7-5 16:26:23 获得部门模块
+				//NOTICE macrotea@qq.com / 2013-7-5 16:26:23 若as RoleModule 会出错
+				var roleModule:ModuleDescribable = roleModuleLoader.child as ModuleDescribable;
+				currentMessage = roleModule.descMeAfterLoaded();
+			}
+
+			protected function roleMessageHandler(data:String):void
+			{
+				currentMessage = data;
+			}
+			
+			/*
+			protected function oneKeyToLoadOtherModulesExcludeUser_clickHandler(event:MouseEvent):void
+			{
+				deptModuleLoader.loadModule();
+				roleModuleLoader.loadModule();
+			}
+			
+			protected function oneKeyToUnLoadOtherModulesExcludeUser_clickHandler(event:MouseEvent):void
+			{
+				deptModuleLoader.unloadModule();
+				roleModuleLoader.unloadModule();
+			}
+			*/
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:VGroup x="0" y="0" width="100%" height="100%" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10">
+		<s:VGroup horizontalAlign="left" verticalAlign="middle" width="100%" fontSize="15" color="#0225F7" fontWeight="bold">
+			<s:Label id="randomTextLabel" text="随机值: {_currentRandomText}"/>
+			<s:Label id="messsageLabel" text="消息提示: {_currentMessage}"/>
+			<!-- 
+			<s:Button label="一键加载除用户模块之外的所有模块" id="oneKeyToLoadOtherModulesExcludeUser" click="oneKeyToLoadOtherModulesExcludeUser_clickHandler(event)"/>
+			<s:Button label="一键卸载除用户模块之外的所有模块" id="oneKeyToUnLoadOtherModulesExcludeUser" click="oneKeyToUnLoadOtherModulesExcludeUser_clickHandler(event)"/>
+			-->
+		</s:VGroup>
+		<mx:TabNavigator id="tabNavigator" width="100%" height="100%" change="tabNavigator_changeHandler(event)">
+			<s:NavigatorContent label="用户" width="100%" height="100%">
+				
+				<!--// NOTICE macrotea@qq.com / 2013-7-5 16:13:25 注意这里-->
+				<mx:ModuleLoader id="userModuleLoader" x="0" y="0" width="100%" height="100%" 
+								 url="com/mtea/demo/module/UserModule.swf"
+								 applicationDomain="{ApplicationDomain.currentDomain}"
+								 ready="userModuleLoader_readyHandler(event)"
+								 >
+				</mx:ModuleLoader>
+			</s:NavigatorContent>
+			<s:NavigatorContent label="部门" width="100%" height="100%">
+				
+				<!--// NOTICE macrotea@qq.com / 2013-7-5 16:13:25 注意这里-->
+				<mx:ModuleLoader id="deptModuleLoader" x="0" y="0" width="100%" height="100%" 
+								 url="com/mtea/demo/module/DeptModule.swf"
+								 applicationDomain="{ApplicationDomain.currentDomain}"
+								 ready="deptModuleLoader_readyHandler(event)"
+								 >
+				</mx:ModuleLoader>
+			</s:NavigatorContent>
+			<s:NavigatorContent label="角色" width="100%" height="100%">
+				
+				<!--// NOTICE macrotea@qq.com / 2013-7-5 16:13:25 注意这里-->
+				<mx:ModuleLoader id="roleModuleLoader" x="0" y="0" width="100%" height="100%" 
+								 url="com/mtea/demo/module/RoleModule.swf"
+								 applicationDomain="{ApplicationDomain.currentDomain}"
+								 ready="roleModuleLoader_readyHandler(event)"
+								 >
+				</mx:ModuleLoader>
+			</s:NavigatorContent>
+		</mx:TabNavigator>
+	</s:VGroup>
+</s:Application>
