@@ -125,6 +125,7 @@
 	</fx:Declarations>
 	<s:VGroup x="0" y="0" width="100%" height="100%" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10">
 		<s:VGroup horizontalAlign="left" verticalAlign="middle" width="100%" fontSize="15" color="#0225F7" fontWeight="bold">
+			<s:Label id="noticeLabel" text="注意: 先点击部门,角色标签页后再进行操作,因为需要这两个模块加载后操作才能响应"/>
 			<s:Label id="randomTextLabel" text="随机值: {_currentRandomText}"/>
 			<s:Label id="messsageLabel" text="消息提示: {_currentMessage}"/>
 			<!-- 
